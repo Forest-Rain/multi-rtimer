@@ -37,7 +37,6 @@ static void on_led0_timeout(void)
  */
 static void on_led1_timeout(void)
 {
-    ////rtimer_stop( &led1_timer );
     rtimer_reset( &led1_timer );
     
     rt_kprintf("on_led1_timeout,%d\r\n",rtimer_get_current_time());
