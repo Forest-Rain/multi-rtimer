@@ -15,7 +15,7 @@ multi_rtimer借鉴了LoRaMac timer 与 0x1abin/MultiTimer
 - 支持长定时器
   - 比如min、hour等
 - 支持在STOP模式下唤醒
- - 适用于超低功耗应用场景
+  - 适用于超低功耗应用场景
 
 
 ## 2 使用说明
@@ -23,7 +23,7 @@ multi_rtimer借鉴了LoRaMac timer 与 0x1abin/MultiTimer
 ### 2.1 依赖
 
 - 硬件RTC及其Alarm中断
- - 要求RTC支持Sub second
+  - 要求RTC支持Sub second
 
 ### 2.2 获取软件包
 
