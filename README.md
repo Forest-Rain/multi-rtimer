@@ -11,7 +11,7 @@ multi_rtimer借鉴了LoRaMac timer 与 0x1abin/MultiTimer
 
 - 基于STM32 RTC实现
 - 支持高精度定时
- - 定时精度最高可支持~31us（1/32768），缺省设置为~1ms(1/1024)
+ - 定时精度最高可支持约31us（1/32768），缺省设置约1ms(1/1024)
 - 支持长定时器
  - 比如min、hour等
 - 支持在STOP模式下唤醒
