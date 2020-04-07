@@ -5,7 +5,7 @@
 multi_rtimer软件包是一个低功耗的实时软件定时器模块，理论上可以无限扩展应用所需的长\短定时器，可低功耗地管理时间触发任务。
 
 multi_rtimer借鉴了LoRaMac timer 与 0x1abin/MultiTimer  
-- https://github.com/0x1abin/MultiTimer
+ - https://github.com/0x1abin/MultiTimer
 
 **主要特点：**
 
@@ -31,14 +31,12 @@ multi_rtimer借鉴了LoRaMac timer 与 0x1abin/MultiTimer
 
 ```
 RT-Thread online packages --->
-    miscellaneous packages --->
-        sensors drivers --->
-            [*] multi_rtimer: a real-time and low power software timer module. --->
-                    Version (latest)  --->
-                    multi_rtimer options --->
-                        [] multi_rtimer demo example
+    peripheral libraries and drivers --->
+        [*] multi_rtimer: a real-time and low power software timer module. --->
+                Version (latest)  --->
+                multi_rtimer options --->
+                    [] multi_rtimer demo example
 ```
-
 
 ### 2.3 使用软件包
 
