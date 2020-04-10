@@ -1,21 +1,21 @@
-# multi_rtimer package 
+# multi_rtimer
 
 ## 1 简介
 
 multi_rtimer软件包是一个低功耗的实时软件定时器模块，理论上可以无限扩展应用所需的长\短定时器，可低功耗地管理时间触发任务。
 
 multi_rtimer借鉴了LoRaMac timer 与 0x1abin/MultiTimer  
-- https://github.com/0x1abin/MultiTimer
+ - https://github.com/0x1abin/MultiTimer
 
 **主要特点：**
 
 - 基于STM32 RTC实现
 - 支持高精度定时
- - 定时精度最高可支持~31us（1/32768），缺省设置为~1ms(1/1024)
+  - 定时精度最高可支持约31us（1/32768），缺省设置约1ms(1/1024)
 - 支持长定时器
- - 比如min、hour等
+  - 比如min、hour等
 - 支持在STOP模式下唤醒
- - 适用于超低功耗应用场景
+  - 适用于超低功耗应用场景
 
 
 ## 2 使用说明
@@ -23,7 +23,7 @@ multi_rtimer借鉴了LoRaMac timer 与 0x1abin/MultiTimer
 ### 2.1 依赖
 
 - 硬件RTC及其Alarm中断
- - 要求RTC支持Sub second
+  - 要求RTC支持Sub second
 
 ### 2.2 获取软件包
 
@@ -31,14 +31,12 @@ multi_rtimer借鉴了LoRaMac timer 与 0x1abin/MultiTimer
 
 ```
 RT-Thread online packages --->
-    miscellaneous packages --->
-        sensors drivers --->
-            [*] multi_rtimer: a real-time and low power software timer module. --->
-                    Version (latest)  --->
-                    multi_rtimer options --->
-                        [] multi_rtimer demo example
+    peripheral libraries and drivers --->
+        [*] multi_rtimer: a real-time and low power software timer module. --->
+                Version (latest)  --->
+                multi_rtimer options --->
+                    [] multi_rtimer demo example
 ```
-
 
 ### 2.3 使用软件包
 
