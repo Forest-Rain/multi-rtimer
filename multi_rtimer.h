@@ -129,6 +129,16 @@ void rtimer_set_value( timer_event_t *obj, uint32_t value );
 TimerTime_t rtimer_get_current_time( void );
 
 /*!
+ * \brief Return the Time elapsed since a fix moment in Time
+ *
+ * \remark TimerGetElapsedTime will return 0 for argument 0.
+ *
+ * \param [IN] past         fix moment in Time
+ * \retval time             returns elapsed time
+ */
+TimerTime_t rtimer_get_elapsed_time( TimerTime_t past );
+
+/*!
  * \brief Computes the temperature compensation for a period of time on a
  *        specific temperature.
  *

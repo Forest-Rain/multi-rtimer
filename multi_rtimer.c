@@ -231,6 +231,19 @@ TimerTime_t rtimer_get_current_time( void )
     return  rtc_tick2ms( now );
 }
 
+TimerTime_t rtimer_get_elapsed_time( TimerTime_t past )
+{
+    if ( past == 0 )
+    {
+        return 0;
+    }
+    uint32_t nowInTicks = rtc_get_timer_value( );
+    uint32_t pastInTicks = rtc_ms2tick( past );
+
+    // Intentional wrap around. Works Ok if tick duration below 1ms
+    return rtc_ms2tick( nowInTicks - pastInTicks );
+}
+
 static void rtimer_set_timeout( timer_event_t *obj )
 {
     int32_t minTicks= rtc_get_minimum_timeout( );
