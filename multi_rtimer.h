@@ -55,6 +55,8 @@ extern "C"
 #define TimerReset           rtimer_reset
 #define TimerSetValue        rtimer_set_value
 #define TimerGetCurrentTime  rtimer_get_current_time
+#define TimerGetElapsedTime  rtimer_get_elapsed_time
+#define TimerEvent_t         timer_event_t
 #endif    
     
 /*!
