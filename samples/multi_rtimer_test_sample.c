@@ -11,7 +11,7 @@
 #include <rtthread.h>
 #include <rtdevice.h>
 #include "multi_rtimer.h"
-#include "hw_rtc_stm32l.h"
+#include "hw_rtc_stm32.h"
 
 static timer_event_t led0_timer;
 static timer_event_t led1_timer;

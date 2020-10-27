@@ -1,5 +1,5 @@
 /*!
- * \file      rtc-board.c
+ * \file      hw_rtc_stm32l.c
  *
  * \brief     Target board RTC timer and low power modes management
  *
@@ -21,19 +21,28 @@
  * \author    Gregory Cristian ( Semtech )
  *
  * \author    MCD Application Team (C)( STMicroelectronics International )
+ *
+ * \author    forest-rain
  */
+#include "board.h"
 #include <math.h>
 #include <time.h>
+#ifdef  SOC_SERIES_STM32L0
+#include "stm32l0xx.h"
+#elif defined SOC_SERIES_STM32L4
 #include "stm32l4xx.h"
-//#include "utilities.h"
-//#include "delay.h"
-#include "board.h"
+#elif defined SOC_SERIES_STM32WL
+#include "stm32wlxx.h"
+#elif defined SOC_SERIES_STM32H7
+#include "stm32h7xx.h"
+#else 
+#error "Undefined MCU type"
+#endif
+
+#include "hw_rtc_stm32.h"
 #include "multi_rtimer.h"
-#include "systime.h"
-//#include "gpio.h"
-//#include "lpm-board.h"
-//#include "rtc-board.h"
-#include "hw_rtc_stm32l.h"
+#include "rtc_systime_service.h"
+
 // MCU Wake Up Time
 #define MIN_ALARM_DELAY                             3 // in ticks
 
@@ -157,6 +166,10 @@ void hw_rtc_init( void )
 
     if( RtcInitialized == false )
     {
+#ifdef STM32WLxx
+        __HAL_RCC_RTCAPB_CLK_ENABLE();
+#endif
+        
         __HAL_RCC_RTC_ENABLE( );
 
         RtcHandle.Instance            = RTC;
@@ -287,19 +300,19 @@ void rtc_set_alarm( uint32_t timeout )
     // We don't go in Low Power mode for timeout below MIN_ALARM_DELAY
     if( ( int64_t )( MIN_ALARM_DELAY + McuWakeUpTimeCal ) < ( int64_t )( timeout - rtc_get_timer_elapsed_time( ) ) )
     {
-        #ifdef RT_USING_PM
-            rt_pm_request(PM_SLEEP_MODE_DEEP);
-        #else
-            ///LpmSetStopMode( LPM_RTC_ID, LPM_ENABLE );
-        #endif
+#ifdef RT_USING_PM
+        rt_pm_request(PM_SLEEP_MODE_DEEP);
+#else
+        ///LpmSetStopMode( LPM_RTC_ID, LPM_ENABLE );
+#endif
     }
     else 
     {
-        #ifdef RT_USING_PM
-            rt_pm_request(PM_SLEEP_MODE_LIGHT);
-        #else
-            ///LpmSetStopMode( LPM_RTC_ID, LPM_DISABLE );
-        #endif
+#ifdef RT_USING_PM
+        rt_pm_request(PM_SLEEP_MODE_LIGHT);
+#else
+    ///LpmSetStopMode( LPM_RTC_ID, LPM_DISABLE );
+#endif
     }
 
     /* 
@@ -321,8 +334,10 @@ void rtc_stop_alarm( void )
     // Clear RTC Alarm Flag
     __HAL_RTC_ALARM_CLEAR_FLAG( &RtcHandle, RTC_FLAG_ALRAF );
 
+#if !defined(STM32WLxx)
     // Clear the EXTI's line Flag for RTC Alarm
     __HAL_RTC_ALARM_EXTI_CLEAR_FLAG( );
+#endif    
 }
 
 void rtc_start_alarm( uint32_t timeout )
@@ -448,7 +463,6 @@ uint32_t rtc_get_timer_elapsed_time( void )
   return( ( uint32_t )( calendarValue - RtcTimerContext.Time ) );
 }
 
-
 static uint64_t RtcGetCalendarValue( RTC_DateTypeDef* date, RTC_TimeTypeDef* time )
 {
     uint64_t calendarValue = 0;
@@ -485,7 +499,7 @@ static uint64_t RtcGetCalendarValue( RTC_DateTypeDef* date, RTC_TimeTypeDef* tim
     return( calendarValue );
 }
 
-uint32_t rtc_get_calendar_time( uint16_t *milliseconds )
+uint32_t rtc_get_calendar_time( uint32_t *milliseconds )
 {
     RTC_TimeTypeDef time ;
     RTC_DateTypeDef date;
@@ -510,13 +524,15 @@ void RTC_Alarm_IRQHandler( void )
     RTC_HandleTypeDef* hrtc = &RtcHandle;
 
     // Enable low power at irq
-    #ifdef RT_USING_PM
-    #else
-        ///LpmSetStopMode( LPM_RTC_ID, LPM_ENABLE );
-    #endif
+#ifdef RT_USING_PM
+#else
+    ///LpmSetStopMode( LPM_RTC_ID, LPM_ENABLE );
+#endif
 
+#if !defined(STM32WLxx)
     // Clear the EXTI's line Flag for RTC Alarm
     __HAL_RTC_ALARM_EXTI_CLEAR_FLAG( );
+#endif
 
     // Gets the AlarmA interrupt source enable status
     if( __HAL_RTC_ALARM_GET_IT_SOURCE( hrtc, RTC_IT_ALRA ) != RESET )
@@ -559,6 +575,7 @@ void rtc_process( void )
     // Not used on this platform.
 }
 
+#ifdef MULTI_RTIMER_USING_RTC_TEMPERTURE_COMPENSATION
 TimerTime_t rtc_temp_compensation( TimerTime_t period, float temperature )
 {
     float k = RTC_TEMP_COEFFICIENT;
@@ -593,5 +610,5 @@ TimerTime_t rtc_temp_compensation( TimerTime_t period, float temperature )
     // Calculate the resulting period
     return ( TimerTime_t ) interim;
 }
-
+#endif
 

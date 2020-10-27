@@ -22,13 +22,10 @@
  *
  * \author    Forest-Rain
  */
-#include <rthw.h>
-#include <rtdevice.h>
-#include <rtthread.h>
-
 #include "board.h"
-#include "hw_rtc_stm32l.h"
-
+#ifdef MULTI_RTIMER_USING_TRAGET_MCU_STM32_RTC
+#include "hw_rtc_stm32.h"
+#endif
 #include "multi_rtimer.h"
 
 /*!
@@ -92,11 +89,11 @@ void rtimer_start( timer_event_t *obj )
     uint32_t elapsedTime = 0;
     timer_event_t **target = &timer_list_head;
 
-    CRITICAL_SECTION_BEGIN( );
+    MULTI_RTIMER_CRITICAL_SECTION_BEGIN( );
 
     if( ( obj == NULL ) || ( rtimer_exists( obj ) == true ) )
     {
-        CRITICAL_SECTION_END( );
+        MULTI_RTIMER_CRITICAL_SECTION_END( );
         return;
     }
 
@@ -132,19 +129,19 @@ void rtimer_start( timer_event_t *obj )
     // Start the next timer_list_head if it exists AND NOT running
     rtimer_reload();
     
-    CRITICAL_SECTION_END( );
+    MULTI_RTIMER_CRITICAL_SECTION_END( );
 }
 
 void rtimer_stop( timer_event_t *obj )
 {
-    CRITICAL_SECTION_BEGIN( );
+    MULTI_RTIMER_CRITICAL_SECTION_BEGIN( );
   
     timer_event_t **target = &timer_list_head;
     
     // List is empty or the obj to stop does not exist
     if( ( timer_list_head == NULL ) || ( obj == NULL ) )
     {
-        CRITICAL_SECTION_END( );
+        MULTI_RTIMER_CRITICAL_SECTION_END( );
         return;
     }
     
@@ -168,7 +165,7 @@ void rtimer_stop( timer_event_t *obj )
                 timer_list_head = NULL;
             }
                                         
-            CRITICAL_SECTION_END( );
+            MULTI_RTIMER_CRITICAL_SECTION_END( );
             return;
         }
     }
@@ -183,7 +180,7 @@ void rtimer_stop( timer_event_t *obj )
         }
     }
     
-    CRITICAL_SECTION_END( );
+    MULTI_RTIMER_CRITICAL_SECTION_END( );
 }
 
 static bool rtimer_exists( timer_event_t *obj )
@@ -303,10 +300,12 @@ void rtimer_irq_handler( void )
     rtimer_reload();
 }
 
+#ifdef MULTI_RTIMER_USING_RTC_TEMPERTURE_COMPENSATION
 TimerTime_t rtimer_temp_compensation( TimerTime_t period, float temperature )
 {
     return rtc_temp_compensation( period, temperature );
 }
+#endif
 
 void rtimer_process( void )
 {

@@ -37,13 +37,13 @@ extern "C"
 /*!
  * Begins critical section
  */
-#define CRITICAL_SECTION_BEGIN( ) register rt_base_t level; level = rt_hw_interrupt_disable()
+#define MULTI_RTIMER_CRITICAL_SECTION_BEGIN( ) register rt_base_t level; level = rt_hw_interrupt_disable()
 
 /*!
  * Ends critical section
  */
-#define CRITICAL_SECTION_END( ) rt_hw_interrupt_enable(level)
-    
+#define MULTI_RTIMER_CRITICAL_SECTION_END( ) rt_hw_interrupt_enable(level)
+
     
 #if 1 
 /*!

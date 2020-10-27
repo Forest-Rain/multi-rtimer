@@ -132,7 +132,7 @@ uint32_t rtc_get_timer_context( void );
  * \param [OUT] milliseconds Number of milliseconds elapsed since epoch
  * \retval seconds Number of seconds elapsed since epoch
  */
-uint32_t rtc_get_calendar_time( uint16_t *milliseconds );
+uint32_t rtc_get_calendar_time( uint32_t *milliseconds );
 
 /*!
  * \brief Get the RTC timer value

@@ -21,6 +21,8 @@
  * \author    Gregory Cristian ( Semtech )
  *
  * \author    MCD Application Team ( STMicroelectronics International )
+ *
+ * \author    forest-rain
  */
 #ifndef __SYS_TIME_H__
 #define __SYS_TIME_H__
@@ -77,6 +79,92 @@ extern "C"
  */
 #define UNIX_GPS_EPOCH_OFFSET                       315964800
 
+
+/*!
+ * \brief Structure holding the system time in seconds and milliseconds.
+ */
+typedef struct SysTime_s
+{
+    uint32_t Seconds;
+    int16_t  SubSeconds;
+}SysTime_t;
+
+
+/*!
+ * \brief Adds 2 SysTime_t values
+ *
+ * \param a Value
+ * \param b Value to added
+ *
+ * \retval result Addition result (SysTime_t value)
+ */
+SysTime_t SysTimeAdd( SysTime_t a, SysTime_t b );
+
+/*!
+ * \brief Subtracts 2 SysTime_t values
+ *
+ * \param a Value
+ * \param b Value to be subtracted
+ *
+ * \retval result Subtraction result (SysTime_t value)
+ */
+SysTime_t SysTimeSub( SysTime_t a, SysTime_t b );
+
+/*!
+ * \brief Sets new system time
+ *
+ * \param  sysTime    New seconds/sub-seconds since UNIX epoch origin
+ */
+void SysTimeSet( SysTime_t sysTime );
+
+/*!
+ * \brief Gets current system time
+ *
+ * \retval sysTime    Current seconds/sub-seconds since UNIX epoch origin
+ */
+SysTime_t SysTimeGet( void );
+
+/*!
+ * \brief Gets current MCU system time
+ *
+ * \retval sysTime    Current seconds/sub-seconds since Mcu started
+ */
+SysTime_t SysTimeGetMcuTime( void );
+
+/*!
+ * Converts the given SysTime to the equivalent RTC value in milliseconds
+ *
+ * \param [IN] sysTime System time to be converted
+ * 
+ * \retval timeMs The RTC converted time value in ms
+ */
+uint32_t SysTimeToMs( SysTime_t sysTime );
+
+/*!
+ * Converts the given RTC value in milliseconds to the equivalent SysTime
+ *
+ * \param [IN] timeMs The RTC time value in ms to be converted
+ * 
+ * \retval sysTime Converted system time
+ */
+SysTime_t SysTimeFromMs( uint32_t timeMs );
+
+/*!
+ * \brief Convert a calendar time into time since UNIX epoch as a uint32_t.
+ *
+ * \param [IN] localtime Pointer to the object containing the calendar time
+ * \retval     timestamp The calendar time as seconds since UNIX epoch.
+ */
+uint32_t SysTimeMkTime( const struct tm* localtime );
+
+/*!
+ * \brief Converts a given time in seconds since UNIX epoch into calendar time.
+ *
+ * \param [IN]  timestamp The time since UNIX epoch to convert into calendar time.
+ * \param [OUT] localtime Pointer to the calendar time object which will contain
+                          the result of the conversion.
+ */
+void SysTimeLocalTime( const uint32_t timestamp, struct tm *localtime );
 
 #ifdef __cplusplus
 }
