@@ -18,7 +18,11 @@ multi_rtimer借鉴了LoRaMac timer 与 0x1abin/MultiTimer
   - 适用于超低功耗应用场景
  - 当前支持的MCU平台
   - STM32
-    - 所需外设:RTC(支持Sub-Second Alarm)
+    - STM32L0
+    - STM32L4
+    - STM32WL
+    - STM32H7
+        - 所需外设:RTC(支持Sub-Second Alarm)
 
 ## 2 使用说明
 

@@ -166,7 +166,7 @@ void hw_rtc_init( void )
 
     if( RtcInitialized == false )
     {
-#ifdef STM32WLxx
+#ifdef SOC_SERIES_STM32WL
         __HAL_RCC_RTCAPB_CLK_ENABLE();
 #endif
         
@@ -334,7 +334,7 @@ void rtc_stop_alarm( void )
     // Clear RTC Alarm Flag
     __HAL_RTC_ALARM_CLEAR_FLAG( &RtcHandle, RTC_FLAG_ALRAF );
 
-#if !defined(STM32WLxx)
+#if !defined(SOC_SERIES_STM32WL)
     // Clear the EXTI's line Flag for RTC Alarm
     __HAL_RTC_ALARM_EXTI_CLEAR_FLAG( );
 #endif    
@@ -529,7 +529,7 @@ void RTC_Alarm_IRQHandler( void )
     ///LpmSetStopMode( LPM_RTC_ID, LPM_ENABLE );
 #endif
 
-#if !defined(STM32WLxx)
+#if !defined(SOC_SERIES_STM32WL)
     // Clear the EXTI's line Flag for RTC Alarm
     __HAL_RTC_ALARM_EXTI_CLEAR_FLAG( );
 #endif
